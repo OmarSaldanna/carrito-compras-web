@@ -1,3 +1,16 @@
+<?php 
+  // codigo inicial de verificacion de sesion:
+  // si ya hay sesion iniciada, redirigimos al dashboard
+  // iniciamos el mecanismo de sesiones
+  session_start();
+
+  // Verificar si no existe una sesión iniciada
+  if(isset($_SESSION['id_usuario'])) {
+    // redirigir a la galeria
+    header("Location: index.php");
+  }
+?>
+
 <!DOCTYPE html>
 <html>
 <head>

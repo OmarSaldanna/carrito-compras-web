@@ -3,9 +3,9 @@
 function connect_db () {
     // conexion a la db
     $servername = "localhost";
-    $username = "toor";
-    $password = "contraseña";
-    $dbname = "empresa";
+    $username = "root";
+    $password = "root";
+    $dbname = "carrito";
     // Crear conexion
     // version para mysql
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -17,17 +17,19 @@ function connect_db () {
 
 function query ($conn, $q) {
     // ejecutar la query
-    // para mysql
     return $conn->query($q);
-    // para psql
-    // return $res=pg_Exec($conn,$q);
-
 }
 
 function disconnect_db ($conn) {
     // cerrar la conexion
     // solo hay en mysql
     $conn->close();
+}
+
+// funcion para redirigir
+function redirect ($to, $msg) {
+    header("Location: $to?alert=$msg");
+    exit();
 }
 
 ?>

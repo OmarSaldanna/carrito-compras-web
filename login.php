@@ -1,16 +1,14 @@
-<?php
-	// codigo inicial de verificacion de sesion:
-	// si ya hay sesion iniciada, redirigimos al dashboard
-	// iniciamos el mecanismo de sesiones
-	// session_start();
+<?php 
+  // codigo inicial de verificacion de sesion:
+  // si ya hay sesion iniciada, redirigimos al dashboard
+  // iniciamos el mecanismo de sesiones
+  session_start();
 
-	// Verificar si no existe una sesión iniciada
-	// if(isset($_SESSION['id_usuario'])) {
-  	// redirigir al dashboard
-		// header("Location: dashboard.php");
-		// exit();
-
-	// }
+  // Verificar si no existe una sesión iniciada
+  if(isset($_SESSION['id_usuario'])) {
+    // redirigir a la galeria
+    header("Location: index.php");
+  }
 ?>
 <!DOCTYPE html>
 <html>
@@ -69,11 +67,11 @@
         <div class="login-card">
           <h4 class="center-align login-title">Iniciar Sesión</h4>
           
-          <form id="login-form">
+          <form id="login-form" action="actions/login.php" method="POST">
             <!-- Email/Username Field -->
             <div class="input-field">
               <i class="material-icons prefix grey-text">person</i>
-              <input id="user_email" name="user_email" type="text" class="validate" required>
+              <input id="user_email" name="email" type="text" class="validate" required>
               <label for="user_email">Email o nombre de usuario</label>
               <span class="helper-text" data-error="Este campo es requerido">Ingresa tu email o nombre de usuario</span>
             </div>
@@ -112,23 +110,7 @@
     </div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const form = document.getElementById('login-form');
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Aquí normalmente enviarías los datos al servidor
-        const formData = new FormData(form);
-        console.log('Intento de inicio de sesión');
-        
-        // Ejemplo de validación básica
-        if (!formData.get('user_email') || !formData.get('password')) {
-          M.toast({html: 'Por favor, completa todos los campos', classes: 'red'});
-          return;
-        }
-      });
-    });
-  </script>
+  <?php require "components/alert.php"; ?>
+
 </body>
 </html>
