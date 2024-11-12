@@ -1,6 +1,4 @@
 <?php 
-	// arrancar el sistema de sesiones
-	session_start();
 
 	// importar los modulos de db
 	require 'db.php';
@@ -35,6 +33,9 @@
 	////////////////////////////// base de datos ////////////////////////////
 
 	// para este punto sabemos que los datos llegaron correctos
+
+	// arrancar el sistema de sesiones
+	session_start();
 
 	// iniciar la conexión
 	$conn = connect_db();

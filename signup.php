@@ -65,11 +65,11 @@
         <div class="registration-card">
           <h4 class="center-align registration-title">Crear Cuenta</h4>
           
-          <form id="registration-form">
+          <form id="registration-form" method="POST" action="actions/signup.php">
             <!-- Username Field -->
             <div class="input-field">
               <i class="material-icons prefix grey-text">person</i>
-              <input name="username" id="username" type="text" class="validate" required>
+              <input name="username" id="username" type="text" class="validate" required value="<?php echo isset($_GET['username']) ? $_GET['username'] : ""; ?>">
               <label for="username">Nombre</label>
               <span class="helper-text" data-error="Nombre requerido">¿Cómo te llamas?</span>
             </div>
@@ -77,7 +77,7 @@
             <!-- Email Field -->
             <div class="input-field">
               <i class="material-icons prefix grey-text">email</i>
-              <input id="email" name="email" type="email" class="validate" required>
+              <input id="email" name="email" type="email" class="validate" required value="<?php echo isset($_GET['email']) ? $_GET['email'] : ""; ?>">
               <label for="email">Email</label>
               <span class="helper-text" data-error="Ingresa un email válido">Tu correo electrónico</span>
             </div>
@@ -100,7 +100,7 @@
 
             <!-- Terms and Conditions Checkbox -->
             <label class="grey-text">
-              <input type="checkbox" required>
+              <input type="checkbox" name="terms">
               <span>Acepto los terminos y condiciones</span>
             </label>
 
@@ -120,25 +120,7 @@
     </div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Form validation
-      const form = document.getElementById('registration-form');
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const password = document.getElementById('password');
-        const confirmPassword = document.getElementById('confirm_password');
-        
-        if (password.value !== confirmPassword.value) {
-          M.toast({html: 'Passwords do not match!', classes: 'red'});
-          return;
-        }
-        
-        // Here you would normally send the form data to your server
-        console.log('Form submitted');
-      });
-    });
-  </script>
+  <?php require "components/alert.php"; ?>
+
 </body>
 </html>
