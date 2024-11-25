@@ -18,7 +18,7 @@
         <li><a href="<?php echo $loged ? "actions/cerrar_sesion.php" : "login.php"; ?>" class="waves-effect waves-light btn white black-text"><?php echo $loged ? "Cerrar" : "Iniciar"; ?> Sesión<i class="material-icons left">log<?php echo $loged ? "out" : "in"; ?></i></a></li>
         <!-- botones desabilitados según la sesión -->
         <li><a href="carrito.php" class="<?php echo $loged ? "" : "hide"; ?>"><i class="material-icons right">shopping_basket</i>Carrito</a></li>
-        <li><a href="perfil.php" class="<?php echo $loged ? "" : "hide"; ?>"><i class="material-icons right">person</i>Mi cuenta</a></li>
+        <li><a href="compras.php" class="<?php echo $loged ? "" : "hide"; ?>"><i class="material-icons right">burst_mode</i>Mis Compras</a></li>
         <!-- otros -->
         <li><a href="nosotros.php">Nosotros</a></li>
         <li><a href="index.php">Galería</a></li>

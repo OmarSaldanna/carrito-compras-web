@@ -146,9 +146,9 @@
                 <h6>$<?php echo number_format($subtotal + $servicio + $impuestos, 2); ?></h6>
               </div>
             </div>
-            <button class="btn black waves-effect waves-light btn-large full-width">
+            <a href="actions/comprar.php" class="btn black waves-effect waves-light btn-large full-width">
               Confirmar Compra
-            </button>
+            </a>
           </div>
         </div>
       </div>
