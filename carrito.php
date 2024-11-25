@@ -1,3 +1,44 @@
+<?php 
+
+  // importar los modulos necesarios
+  require "actions/db.php";
+
+  // iniciar la sesión
+  session_start();
+
+  // conectar la db
+  $conn = connect_db();
+
+  // obtener el id de usuario
+  $id_usuario = $_SESSION['id_usuario'];
+
+  // Obtener el carrito activo del usuario
+  $sql_carrito = "SELECT c.id_carrito 
+                  FROM carritos c 
+                  WHERE c.id_usuario = $id_usuario
+                  ORDER BY c.fecha_creacion DESC 
+                  LIMIT 1";
+
+  // ejcutar la query
+  $result_carrito = query($conn, $sql_carrito);
+  // obtener los datos
+  $carrito = $result_carrito->fetch_assoc();
+
+  if ($carrito) {
+    $id_carrito = $carrito['id_carrito'];
+    // Obtener los items del carrito con detalles del producto
+    $sql_items = query($conn, "SELECT ic.*, p.imagen_url, p.categorias, p.id_producto 
+                  FROM items_carrito ic 
+                  JOIN productos p ON ic.id_producto = p.id_producto 
+                  WHERE ic.id_carrito = $id_carrito");
+  }
+
+  // Calcular totales
+  $subtotal = 0;
+  $servicio = 9.99;
+  $impuestos = 0;
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,7 +76,6 @@
   <?php require "components/navbar.php"; ?>  
 
   <div class="space"></div>
-  <div class="space"></div>
 
   <div class="container">
     <div class="row">
@@ -44,93 +84,77 @@
         <h1>Carrito de Compras</h1>
         
         <!-- Cart Item 1 -->
-        <div class="cart-item">
-          <div class="row valign-wrapper">
-            <div class="col s12 m3">
-              <img src="stock/images_02c7e2cb7b91ef3b.png" alt="Imagen 1" class="product-image">
-            </div>
-            <div class="col s12 m6">
-              <h6 class="grey-text text-darken-4">Product Name 1</h6>
-              <p class="grey-text">Imagen</p>
-            </div>
-            <div class="col s12 m3">
-              <h6 class="price">$99.99</h6>
-              <a href="#!" class="remove-btn"><i class="material-icons">close</i></a>
-            </div>
-          </div>
-        </div>
+        <?php 
+          // si si hay carrito y hay productos
+          if ($carrito && $sql_items->num_rows > 0) {
+            // por cada item
+            while ($item = $sql_items->fetch_assoc()) {
+              // calculos de precio
+              $subtotal += $item['precio_unitario'] * $item['cantidad'];
+              $impuestos = $subtotal * 0.10; // 10% de impuestos
+              // mostrar el producto
+              echo '
+                <div class="cart-item">
+                  <div class="row valign-wrapper">
+                    <div class="col s12 m3">
+                      <img src="stock/'. $item["imagen_url"] .'" alt="Imagen 1" class="product-image">
+                    </div>
+                    <div class="col s12 m6">
+                      <h5 class="grey-text text-darken-4">'. $item["categorias"] .'</h5>
+                    </div>
+                    <div class="col s12 m3">
+                      <h6 class="price">$'. $item['precio_unitario'] .'</h6>
+                      <a href="actions/eliminar.php?id_producto='. $item['id_producto'] .'" class="remove-btn"><i class="material-icons">remove_shopping_cart</i></a>
+                    </div>
+                  </div>
+                </div>';
+            }
+          }
+          else {
+            redirect("index.php", "M.toast({html: 'Tu carrito está vacío'});");
+          }
+        ?>
 
-        <!-- Cart Item 2 -->
-        <div class="cart-item">
-          <div class="row valign-wrapper">
-            <div class="col s12 m3">
-              <img src="stock/images_1af064522c445d41.png" alt="Imagen 2" class="product-image">
-            </div>
-            <div class="col s12 m6">
-              <h6 class="grey-text text-darken-4">Product Name 2</h6>
-              <p class="grey-text">Imagen</p>
-            </div>
-            <div class="col s12 m3">
-              <h6 class="price">$149.99</h6>
-              <a href="#!" class="remove-btn"><i class="material-icons">close</i></a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Cart Item 3 -->
-        <div class="cart-item">
-          <div class="row valign-wrapper">
-            <div class="col s12 m3">
-              <img src="stock/images_5798d711a7bb78d0.png" alt="Imagen 2" class="product-image">
-            </div>
-            <div class="col s12 m6">
-              <h6 class="grey-text text-darken-4">Product Name 2</h6>
-              <p class="grey-text">Imagen</p>
-            </div>
-            <div class="col s12 m3">
-              <h6 class="price">$99.99</h6>
-              <a href="#!" class="remove-btn"><i class="material-icons">close</i></a>
-            </div>
-          </div>
-        </div>
+        <div class="space"></div>
+        <a class="waves-effect waves-light btn black" href="index.php"><i class="material-icons right">add_shopping_cart</i>Seguir comprando</a>
 
       </div>
 
-
-
-      <!-- Order Summary Section -->
-      <div class="col s12 m4">
-        <div class="summary-card">
-          <h5 class="grey-text text-darken-3">Productos</h5>
-          <div class="divider"></div>
-          <div class="row">
-            <div class="col s6">
-              <p>Subtotal</p>
-              <p>Servicio</p>
-              <p>Impuestos</p>
+        <!-- Order Summary Section -->
+        <div class="col s12 m4">
+          <div class="summary-card">
+            <h5 class="grey-text text-darken-3">Productos</h5>
+            <div class="divider"></div>
+            <div class="row">
+              <div class="col s6">
+                <p>Subtotal</p>
+                <p>Servicio</p>
+                <p>Impuestos</p>
+              </div>
+              <div class="col s6 right-align">
+                <p>$<?php echo number_format($subtotal, 2); ?></p>
+                <p>$<?php echo number_format($servicio, 2); ?></p>
+                <p>$<?php echo number_format($impuestos, 2); ?></p>
+              </div>
             </div>
-            <div class="col s6 right-align">
-              <p>$249.98</p>
-              <p>$9.99</p>
-              <p>$25.00</p>
+            <div class="divider"></div>
+            <div class="row">
+              <div class="col s6">
+                <h6>Total</h6>
+              </div>
+              <div class="col s6 right-align">
+                <h6>$<?php echo number_format($subtotal + $servicio + $impuestos, 2); ?></h6>
+              </div>
             </div>
+            <button class="btn black waves-effect waves-light btn-large full-width">
+              Confirmar Compra
+            </button>
           </div>
-          <div class="divider"></div>
-          <div class="row">
-            <div class="col s6">
-              <h6>Total</h6>
-            </div>
-            <div class="col s6 right-align">
-              <h6>$284.97</h6>
-            </div>
-          </div>
-          <button class="btn black waves-effect waves-light btn-large full-width">
-            Confirmar Compra
-          </button>
         </div>
       </div>
-    </div>
   </div>
+
+  <?php require "components/alert.php"; ?>
 
 </body>
 </html>

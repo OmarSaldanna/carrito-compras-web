@@ -8,3 +8,5 @@
 <link rel="stylesheet" type="text/css" href="css/main.css">
 <!-- y el icono -->
 <link rel="icon" type="image/png" href="assets/logo.png" />
+<!-- titulo -->
+<title>AI Stock</title>

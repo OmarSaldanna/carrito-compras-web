@@ -2,7 +2,9 @@
   // codigo inicial de verificacion de sesion:
   // si ya hay sesion iniciada, redirigimos al dashboard
   // iniciamos el mecanismo de sesiones
-  session_start();
+  if(session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+  }
   // verificar la sesion
   $loged = isset($_SESSION['id_usuario']);
 ?>
