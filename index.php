@@ -44,16 +44,14 @@
   
   <div class="section white">
 	<!-- titulo -->
-	<div class="row container">
-        <h1 class="gray-text header"><span class="marked space-left">Explora</span> Nuestra Galería</h1>
+	<div class="row container center">
+        <h1 class="gray-text header"><span class="marked">Explora</span> Nuestra Galería</h1>
 	</div>
   </div>
 
   <div class="space"></div>
 
   <!-- apartado de imágenes -->
-
-  <!-- # -p considerando el código php de arriba, quiero que esos 15 elementos seleccionados de la base de datos los escribas mediante php en div .row cada tres imágenes, considera que los datos lucen de la siguiente manera: (1, 63, 'images_79ad8f8434955a7b.png', 'abstracto ícono arte') siendo (id_producto, precio, imagen_url, categorias). Quiero que el botón de a, redireccione a actions/agrefar.php y que por get pases la id_producto. En los span coloca cada una de las categorías (que vienen separadas por espacios en los datos)  -->
   <?php
     // obtenemos los productos
     $productosData = getPaginatedProducts();
@@ -68,7 +66,7 @@
         // por cada categoría
         $categorias = explode(' ', $producto['categorias']);
         // imprimirmos las apan de cateorías y la imagen
-        echo '<div class="col s4">
+        echo '<div class="col m4 s12">
           <div class="card">
             <div class="card-image">
               <img src="stock/' . $producto['imagen_url'] . '">
