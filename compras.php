@@ -1,5 +1,5 @@
 <?php
-    // importar los modulos de db
+    // Importar los modulos de db
     require 'actions/db.php';
     // Iniciar la sesión 
     session_start();
@@ -8,14 +8,14 @@
     $not_session = "M.toast({html: 'Antes tienes que iniciar sesión'});";
     
     ////////////////////////////// Comprobaciones ////////////////////////////
-    // si no hay sesión
+    // Si no hay sesión activa, redirigir al usuario
     if(!isset($_SESSION['id_usuario'])) {
-        // redireccionar con alerta
+        // Redireccionar con alerta
         redirect("index.php", $not_session);
     }
     
     ////////////////////////////// Acciones ////////////////////////////
-    // conectar a la base de datos
+    // Conectar a la base de datos
     $conn = connect_db();
     $id_usuario = $_SESSION['id_usuario'];
     
@@ -64,7 +64,10 @@
 </head>
 <body>
 
-<?php require "components/navbar.php"; ?>
+<?php 
+    // Incluir la barra de navegación
+    require "components/navbar.php"; 
+?>
 
 <div class="space"></div>
 
@@ -78,20 +81,27 @@
     <div class="space"></div>
 
     <div class="row">
-        <?php if(mysqli_num_rows($resultado) > 0): ?>
-            <?php while($compra = mysqli_fetch_assoc($resultado)): ?>
+        <?php 
+        // Verificar si existen compras para mostrar
+        if(mysqli_num_rows($resultado) > 0) {
+            // Iterar sobre cada compra encontrada
+            while($compra = mysqli_fetch_assoc($resultado)) {
+        ?>
                 <div class="col s12 m6 l4">
                     <div class="card purchase-card">
                         <div class="card-image">
-                            <img src="stock/<?php echo htmlspecialchars($compra['imagen_url']); ?>" 
+                            <!-- Mostrar la imagen comprada -->
+                            <img src="stock/<?php echo $compra['imagen_url']; ?>" 
                                  alt="Imagen comprada" 
                                  class="purchase-image">
+                            <!-- Mostrar la fecha de compra -->
                             <span class="date-badge">
                                 <?php echo date('d/m/Y', strtotime($compra['fecha_compra'])); ?>
                             </span>
                         </div>
                         <div class="card-content purchase-info">
                             <div class="purchase-details">
+                                <!-- Mostrar el precio de la imagen -->
                                 <p>
                                     <i class="material-icons tiny">attach_money</i>
                                     Precio: $<?php echo number_format($compra['precio_unitario'], 2); ?>
@@ -99,22 +109,24 @@
                             </div>
                             <div class="categories">
                                 <?php 
+                                    // Separar y mostrar las categorías de la imagen
                                     $categorias = explode(',', $compra['categorias']);
-                                    foreach($categorias as $categoria): 
+                                    foreach($categorias as $categoria) { 
                                         $categoria = trim($categoria);
-                                        if(!empty($categoria)):
+                                        if(!empty($categoria)) {
                                 ?>
                                     <div class="chip category-chip">
-                                        <?php echo htmlspecialchars($categoria); ?>
+                                        <?php echo $categoria; ?>
                                     </div>
                                 <?php 
-                                        endif;
-                                    endforeach; 
+                                        }
+                                    }
                                 ?>
                             </div>
                         </div>
                         <div class="card-action">
-                            <a href="<?php echo htmlspecialchars($compra['imagen_url']); ?>" 
+                            <!-- Botón para descargar la imagen -->
+                            <a href="stock/<?php echo $compra['imagen_url']; ?>" 
                                download
                                class="waves-effect waves-light btn-small black">
                                 <i class="material-icons left">file_download</i>
@@ -123,8 +135,11 @@
                         </div>
                     </div>
                 </div>
-            <?php endwhile; ?>
-        <?php else: ?>
+        <?php 
+            }
+        } else {
+            // Mostrar mensaje cuando no hay compras
+        ?>
             <div class="col s12">
                 <div class="card-panel center-align">
                     <i class="material-icons medium">shopping_basket</i>
@@ -134,11 +149,16 @@
                     </a>
                 </div>
             </div>
-        <?php endif; ?>
+        <?php 
+        }
+        ?>
     </div>
 </div>
 
-<?php require "components/alert.php"; ?>
+<?php 
+    // Incluir el componente de alertas
+    require "components/alert.php"; 
+?>
 
 </body>
 </html>
