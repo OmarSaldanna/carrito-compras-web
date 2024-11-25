@@ -11,8 +11,6 @@ INSERT INTO productos (precio, imagen_url, categorias) VALUES
 INSERT INTO productos (precio, imagen_url, categorias) VALUES
     (63, 'images_79ad8f8434955a7b.png', 'abstracto ícono arte');
 INSERT INTO productos (precio, imagen_url, categorias) VALUES
-    (35, '.DS_Store', 'abstracto dibujo arte');
-INSERT INTO productos (precio, imagen_url, categorias) VALUES
     (39, 'images_085dea3147d469ff.png', 'arte ícono logo');
 INSERT INTO productos (precio, imagen_url, categorias) VALUES
     (58, 'images_40c25b51e0a007de.png', 'ícono arte logo');
